@@ -6,14 +6,14 @@ const Navigation = () => {
 
   const navItems = [
     { label: "THE AGENCY", href: "#agency" },
-    { label: "TALENT", href: "#talent" },
+    { label: "CASTING", href: "#talent" },
     { label: "TALENT HUB", href: "/auth" },
     { label: "CONTACT", href: "#contact" },
   ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 mix-blend-difference">
-      <div className="container mx-auto px-6 py-6">
+      <div className="container mx-auto px-6 py-2">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <a href="#" className="font-display text-2xl tracking-wider text-foreground hover:text-neon transition-colors">
