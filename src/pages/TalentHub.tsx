@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, LogOut, User as UserIcon, Calendar, Briefcase, FileText, Bell, BookOpen, Target } from "lucide-react";
+import { Loader2, Briefcase, FileText, Bell, BookOpen, Target, TrendingUp, Users, Calendar } from "lucide-react";
+import TalentHubLayout from "@/components/TalentHubLayout";
 
 const TalentHub = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -79,26 +79,6 @@ const TalentHub = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      
-      toast({
-        title: "Até logo!",
-        description: "Você saiu do sistema",
-      });
-      
-      navigate("/");
-    } catch (error) {
-      toast({
-        title: "Erro ao sair",
-        description: "Ocorreu um erro ao tentar sair",
-        variant: "destructive",
-      });
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -107,130 +87,133 @@ const TalentHub = () => {
     );
   }
 
-  const menuItems = [
-    { icon: UserIcon, label: "Meu Perfil", description: "Visualize seus dados pessoais", path: "/profile" },
-    { icon: Calendar, label: "Jornada", description: "Acompanhe sua trajetória", path: "/journey" },
-    { icon: Target, label: "Minha Formação", description: "Programa de capacitação", path: "/training-journey" },
-    { icon: BookOpen, label: "Cursos", description: "Plataforma de aprendizado", path: "/courses" },
-    { icon: Briefcase, label: "Jobs", description: "Trabalhos e oportunidades", path: "/jobs" },
-    { icon: FileText, label: "Documentos", description: "Contratos e materiais", path: "/documents" },
-    { icon: Bell, label: "Avisos", description: "Mensagens da agência", path: "/notices" },
+  const statsCards = [
+    { icon: Briefcase, label: "Jobs Ativos", value: "3", color: "from-blue-500/10 to-blue-600/20" },
+    { icon: Target, label: "Progresso Formação", value: "45%", color: "from-purple-500/10 to-purple-600/20" },
+    { icon: BookOpen, label: "Cursos em Andamento", value: "2", color: "from-green-500/10 to-green-600/20" },
+    { icon: Bell, label: "Novos Avisos", value: "1", color: "from-orange-500/10 to-orange-600/20" },
+  ];
+
+  const quickActions = [
+    { icon: Target, label: "Ver Minha Formação", description: "Acompanhe seu desenvolvimento", path: "/training-journey" },
+    { icon: BookOpen, label: "Continuar Cursos", description: "Retome seus estudos", path: "/courses" },
+    { icon: Briefcase, label: "Ver Jobs", description: "Oportunidades disponíveis", path: "/jobs" },
+    { icon: Calendar, label: "Minha Jornada", description: "Timeline da sua carreira", path: "/journey" },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-metal/10 to-carbon/5">
-      {/* Header */}
-      <header className="bg-background/80 backdrop-blur-lg border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-display tracking-wider">TALENT HUB</h1>
-              {isAdmin && (
-                <span className="text-xs text-primary font-medium">ADMIN</span>
-              )}
-            </div>
-            <Button variant="ghost" onClick={handleSignOut}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Sair
-            </Button>
-          </div>
-        </div>
-      </header>
+    <TalentHubLayout userName={profile?.full_name || user?.email} isAdmin={isAdmin}>
+      {/* Welcome Section */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2">
+          Olá, {profile?.full_name?.split(' ')[0] || 'Profissional'}! 👋
+        </h1>
+        <p className="text-slate-600 dark:text-slate-400">
+          Bem-vindo(a) ao seu painel de gerenciamento
+        </p>
+      </div>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-display mb-2">
-            Bem-vindo(a), {profile?.full_name || user?.email}!
-          </h2>
-          <p className="text-muted-foreground">
-            Gerencie sua carreira e acompanhe todas as suas oportunidades
-          </p>
-        </div>
-
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {menuItems.map((item) => (
-            <Card 
-              key={item.label} 
-              className={`hover:shadow-lg transition-shadow group ${item.path ? 'cursor-pointer' : ''}`}
-              onClick={() => item.path && navigate(item.path)}
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {statsCards.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <div 
+              key={stat.label}
+              className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${stat.color} p-6 backdrop-blur-xl border border-slate-200/50 dark:border-slate-700/50`}
             >
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <item.icon className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" />
+              <div className="flex items-start justify-between mb-4">
+                <div className="p-3 rounded-xl bg-white/50 dark:bg-slate-800/50">
+                  <Icon className="h-6 w-6 text-slate-700 dark:text-slate-300" />
                 </div>
-                <CardTitle className="font-display">{item.label}</CardTitle>
-                <CardDescription>{item.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-sm text-muted-foreground">
-                  Clique para acessar
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{stat.label}</p>
+                <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{stat.value}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Quick Actions */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-6">
+          Ações Rápidas
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {quickActions.map((action) => {
+            const Icon = action.icon;
+            return (
+              <button
+                key={action.label}
+                onClick={() => navigate(action.path)}
+                className="group relative overflow-hidden rounded-2xl bg-white dark:bg-slate-800 p-6 text-left transition-all hover:scale-[1.02] hover:shadow-xl border border-slate-200/50 dark:border-slate-700/50"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                    <Icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-1 group-hover:text-primary transition-colors">
+                      {action.label}
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      {action.description}
+                    </p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        {/* Admin Access */}
-        {isAdmin && (
-          <Card className="bg-primary/5 border-primary/20 mt-8">
-            <CardHeader>
-              <CardTitle className="font-display flex items-center gap-2">
-                <span className="text-primary">⚡</span> Acesso Administrativo
-              </CardTitle>
-              <CardDescription>
-                Você tem permissões de administrador
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button onClick={() => navigate("/admin")} className="w-full">
-                Acessar Painel Administrativo
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Status</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-primary capitalize">
+      {/* Profile Summary */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold">Status</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-xl font-bold text-slate-900 dark:text-slate-100 capitalize">
                 {profile?.status || "Ativo"}
-              </div>
-            </CardContent>
-          </Card>
+              </span>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Data de Entrada</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {profile?.entry_date 
-                  ? new Date(profile.entry_date).toLocaleDateString('pt-BR')
-                  : "—"}
-              </div>
-            </CardContent>
-          </Card>
+        <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold">Data de Entrada</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              {profile?.entry_date 
+                ? new Date(profile.entry_date).toLocaleDateString('pt-BR', { 
+                    day: '2-digit', 
+                    month: 'long', 
+                    year: 'numeric' 
+                  })
+                : "—"}
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Perfil</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {isAdmin ? "Administrador" : "Profissional"}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
-    </div>
+        <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold">Tipo de Perfil</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              {isAdmin ? "Administrador" : "Profissional"}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </TalentHubLayout>
   );
 };
 
