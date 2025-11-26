@@ -4,9 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, BookOpen, Play, CheckCircle2, Clock } from "lucide-react";
+import { BookOpen, Play, CheckCircle2, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import TalentHubLayout from "@/components/TalentHubLayout";
 
 type Course = {
   id: string;
@@ -26,6 +27,8 @@ const Courses = () => {
   const [filter, setFilter] = useState<string>("all");
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     loadCourses();
@@ -38,6 +41,17 @@ const Courses = () => {
         navigate("/auth");
         return;
       }
+      
+      setUser(user);
+      
+      // Fetch profile
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+      
+      setProfile(profileData);
 
       // Fetch all active courses
       const { data: coursesData, error: coursesError } = await supabase
@@ -120,40 +134,32 @@ const Courses = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando cursos...</p>
+      <TalentHubLayout userName={profile?.full_name || user?.email}>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-slate-600 dark:text-slate-400">Carregando cursos...</p>
+          </div>
         </div>
-      </div>
+      </TalentHubLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
+    <TalentHubLayout userName={profile?.full_name || user?.email}>
       {/* Header */}
-      <header className="bg-background/80 backdrop-blur-lg border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/talent-hub")}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-display tracking-wider">CURSOS</h1>
-                <p className="text-sm text-muted-foreground">Sua jornada de aprendizado</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card className="border-none shadow-sm">
-            <CardContent className="pt-6">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2">
+          Cursos
+        </h1>
+        <p className="text-slate-600 dark:text-slate-400">
+          Sua jornada de aprendizado
+        </p>
+      </div>
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50">
+          <CardContent className="pt-6">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-primary/10 rounded-2xl">
                   <BookOpen className="h-5 w-5 text-primary" />
@@ -163,11 +169,11 @@ const Courses = () => {
                   <p className="text-sm text-muted-foreground">Total de Cursos</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+          </CardContent>
+        </Card>
 
-          <Card className="border-none shadow-sm">
-            <CardContent className="pt-6">
+        <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50">
+          <CardContent className="pt-6">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-blue-500/10 rounded-2xl">
                   <Play className="h-5 w-5 text-blue-600" />
@@ -179,11 +185,11 @@ const Courses = () => {
                   <p className="text-sm text-muted-foreground">Em Andamento</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+          </CardContent>
+        </Card>
 
-          <Card className="border-none shadow-sm">
-            <CardContent className="pt-6">
+        <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50">
+          <CardContent className="pt-6">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-green-500/10 rounded-2xl">
                   <CheckCircle2 className="h-5 w-5 text-green-600" />
@@ -195,11 +201,11 @@ const Courses = () => {
                   <p className="text-sm text-muted-foreground">Concluídos</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+          </CardContent>
+        </Card>
 
-          <Card className="border-none shadow-sm">
-            <CardContent className="pt-6">
+        <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50">
+          <CardContent className="pt-6">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-orange-500/10 rounded-2xl">
                   <Clock className="h-5 w-5 text-orange-600" />
@@ -211,99 +217,100 @@ const Courses = () => {
                   <p className="text-sm text-muted-foreground">Não Iniciados</p>
                 </div>
               </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters */}
+      <div className="flex gap-2 mb-6">
+        <Button
+          variant={filter === "all" ? "default" : "outline"}
+          onClick={() => setFilter("all")}
+          className="rounded-full"
+        >
+          Todos
+        </Button>
+        <Button
+          variant={filter === "in_progress" ? "default" : "outline"}
+          onClick={() => setFilter("in_progress")}
+          className="rounded-full"
+        >
+          Em Andamento
+        </Button>
+        <Button
+          variant={filter === "not_started" ? "default" : "outline"}
+          onClick={() => setFilter("not_started")}
+          className="rounded-full"
+        >
+          Não Iniciados
+        </Button>
+        <Button
+          variant={filter === "completed" ? "default" : "outline"}
+          onClick={() => setFilter("completed")}
+          className="rounded-full"
+        >
+          Concluídos
+        </Button>
+      </div>
+
+      {/* Courses Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredCourses.map((course) => (
+          <Card
+            key={course.id}
+            className="group hover:shadow-xl transition-all duration-300 cursor-pointer rounded-2xl border-slate-200/50 dark:border-slate-700/50 overflow-hidden"
+            onClick={() => navigate(`/courses/${course.id}`)}
+          >
+            {/* Thumbnail */}
+            <div className="relative h-48 overflow-hidden">
+              <img
+                src={course.thumbnail_url}
+                alt={course.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute top-3 right-3">{getStatusBadge(course.status)}</div>
+              <div className="absolute top-3 left-3">
+                <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">
+                  {course.category}
+                </Badge>
+              </div>
+            </div>
+
+            <CardHeader>
+              <CardTitle className="text-lg">{course.title}</CardTitle>
+              <CardDescription className="line-clamp-2">{course.description}</CardDescription>
+            </CardHeader>
+
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-600 dark:text-slate-400">
+                    {course.completedLessons} de {course.totalLessons} aulas
+                  </span>
+                  <span className="font-medium">{course.progress}%</span>
+                </div>
+                <Progress value={course.progress} className="h-2" />
+              </div>
             </CardContent>
           </Card>
+        ))}
+      </div>
+
+      {/* Empty State */}
+      {filteredCourses.length === 0 && (
+        <div className="text-center py-16">
+          <BookOpen className="h-16 w-16 mx-auto text-slate-400 mb-4" />
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            Nenhum curso encontrado
+          </h3>
+          <p className="text-slate-600 dark:text-slate-400">
+            {filter === "all"
+              ? "Em breve novos cursos estarão disponíveis ✨"
+              : "Você não tem cursos nesta categoria ainda."}
+          </p>
         </div>
-
-        {/* Filters */}
-        <div className="flex gap-2 mb-6">
-          <Button
-            variant={filter === "all" ? "default" : "outline"}
-            onClick={() => setFilter("all")}
-            className="rounded-full"
-          >
-            Todos
-          </Button>
-          <Button
-            variant={filter === "in_progress" ? "default" : "outline"}
-            onClick={() => setFilter("in_progress")}
-            className="rounded-full"
-          >
-            Em Andamento
-          </Button>
-          <Button
-            variant={filter === "not_started" ? "default" : "outline"}
-            onClick={() => setFilter("not_started")}
-            className="rounded-full"
-          >
-            Não Iniciados
-          </Button>
-          <Button
-            variant={filter === "completed" ? "default" : "outline"}
-            onClick={() => setFilter("completed")}
-            className="rounded-full"
-          >
-            Concluídos
-          </Button>
-        </div>
-
-        {/* Courses Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCourses.map((course) => (
-            <Card
-              key={course.id}
-              className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-none overflow-hidden"
-              onClick={() => navigate(`/courses/${course.id}`)}
-            >
-              {/* Thumbnail */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={course.thumbnail_url}
-                  alt={course.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-3 right-3">{getStatusBadge(course.status)}</div>
-                <div className="absolute top-3 left-3">
-                  <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">
-                    {course.category}
-                  </Badge>
-                </div>
-              </div>
-
-              <CardHeader>
-                <CardTitle className="font-display text-lg">{course.title}</CardTitle>
-                <CardDescription className="line-clamp-2">{course.description}</CardDescription>
-              </CardHeader>
-
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">
-                      {course.completedLessons} de {course.totalLessons} aulas
-                    </span>
-                    <span className="font-medium">{course.progress}%</span>
-                  </div>
-                  <Progress value={course.progress} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {filteredCourses.length === 0 && (
-          <div className="text-center py-16">
-            <BookOpen className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
-            <h3 className="text-xl font-display mb-2">Nenhum curso encontrado</h3>
-            <p className="text-muted-foreground">
-              {filter === "all"
-                ? "Em breve novos cursos estarão disponíveis ✨"
-                : "Você não tem cursos nesta categoria ainda."}
-            </p>
-          </div>
-        )}
-      </main>
-    </div>
+      )}
+    </TalentHubLayout>
   );
 };
 

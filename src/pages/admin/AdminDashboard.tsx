@@ -12,7 +12,9 @@ import {
   Briefcase, 
   Building2,
   FileText,
-  Bell
+  Bell,
+  BookOpen,
+  GraduationCap
 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -130,6 +132,18 @@ const AdminDashboard = () => {
       icon: Bell, 
       label: "Avisos", 
       description: "Enviar comunicados",
+      badge: "Em breve"
+    },
+    { 
+      icon: BookOpen, 
+      label: "Cursos", 
+      description: "Gerenciar cursos e formação",
+      path: "/admin/courses"
+    },
+    { 
+      icon: GraduationCap, 
+      label: "Relatórios de Formação", 
+      description: "Acompanhar progresso dos talentos",
       badge: "Em breve"
     },
   ];

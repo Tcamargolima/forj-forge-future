@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, CheckCircle2, Lock, BookOpen, Target } from "lucide-react";
+import { CheckCircle2, Lock, BookOpen, Target } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import TalentHubLayout from "@/components/TalentHubLayout";
 
 type TrainingLevel = {
   id: string;
@@ -27,6 +27,8 @@ const TrainingJourney = () => {
   const [loading, setLoading] = useState(true);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
   const [levelCourses, setLevelCourses] = useState<any[]>([]);
+  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     loadTrainingLevels();
@@ -39,6 +41,17 @@ const TrainingJourney = () => {
         navigate("/auth");
         return;
       }
+      
+      setUser(user);
+      
+      // Fetch profile
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+      
+      setProfile(profileData);
 
       // Fetch training levels
       const { data: levelsData, error: levelsError } = await supabase
@@ -158,46 +171,40 @@ const TrainingJourney = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando sua jornada...</p>
+      <TalentHubLayout userName={profile?.full_name || user?.email}>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-slate-600 dark:text-slate-400">Carregando sua jornada...</p>
+          </div>
         </div>
-      </div>
+      </TalentHubLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
+    <TalentHubLayout userName={profile?.full_name || user?.email}>
       {/* Header */}
-      <header className="bg-background/80 backdrop-blur-lg border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/talent-hub")}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-display tracking-wider">MINHA FORMAÇÃO</h1>
-                <p className="text-sm text-muted-foreground">Sua jornada até o topo</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
-        {/* Hero Section */}
-        <Card className="border-none shadow-sm mb-8 bg-gradient-to-r from-primary/10 to-accent/10">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2">
+          Minha Formação
+        </h1>
+        <p className="text-slate-600 dark:text-slate-400">
+          Sua jornada até o topo
+        </p>
+      </div>
+      {/* Hero Section */}
+      <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50 mb-8 bg-gradient-to-r from-primary/10 to-primary/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
               <div className="p-4 bg-primary/10 rounded-2xl">
                 <Target className="h-8 w-8 text-primary" />
               </div>
               <div className="flex-1">
-                <h2 className="text-xl font-display mb-2">Programa de Formação</h2>
-                <p className="text-muted-foreground">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                  Programa de Formação
+                </h2>
+                <p className="text-slate-600 dark:text-slate-400">
                   6 níveis que vão te levar de New Face até Top Talent. Complete cada etapa para
                   desbloquear oportunidades exclusivas.
                 </p>
@@ -206,12 +213,12 @@ const TrainingJourney = () => {
           </CardContent>
         </Card>
 
-        {/* Timeline */}
-        <div className="space-y-4 mb-8">
-          {levels.map((level, index) => (
-            <Card
-              key={level.id}
-              className={`border-none shadow-sm transition-all duration-300 cursor-pointer hover:shadow-xl ${
+      {/* Timeline */}
+      <div className="space-y-4 mb-8">
+        {levels.map((level, index) => (
+          <Card
+            key={level.id}
+            className={`rounded-2xl border-slate-200/50 dark:border-slate-700/50 transition-all duration-300 cursor-pointer hover:shadow-xl ${
                 selectedLevel === level.id ? "ring-2 ring-primary" : ""
               } ${
                 level.status === "completed"
@@ -257,27 +264,27 @@ const TrainingJourney = () => {
               </CardHeader>
               <CardContent>
                 <Progress value={level.progress} className="h-2" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-        {/* Level Courses */}
-        {selectedLevel && levelCourses.length > 0 && (
-          <div>
-            <h3 className="text-xl font-display mb-4">
-              Cursos do {levels.find((l) => l.id === selectedLevel)?.short_name}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {levelCourses.map((course) => {
-                const progress = course.talent_courses?.[0]?.progress_percentage || 0;
-                const status = course.talent_courses?.[0]?.status || "not_started";
+      {/* Level Courses */}
+      {selectedLevel && levelCourses.length > 0 && (
+        <div>
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            Cursos do {levels.find((l) => l.id === selectedLevel)?.short_name}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {levelCourses.map((course) => {
+              const progress = course.talent_courses?.[0]?.progress_percentage || 0;
+              const status = course.talent_courses?.[0]?.status || "not_started";
 
-                return (
-                  <Card
-                    key={course.id}
-                    className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-none overflow-hidden"
-                    onClick={() => navigate(`/courses/${course.id}`)}
+              return (
+                <Card
+                  key={course.id}
+                  className="group hover:shadow-xl transition-all duration-300 cursor-pointer rounded-2xl border-slate-200/50 dark:border-slate-700/50 overflow-hidden"
+                  onClick={() => navigate(`/courses/${course.id}`)}
                   >
                     <div className="relative h-48 overflow-hidden">
                       <img
@@ -310,24 +317,25 @@ const TrainingJourney = () => {
                       </div>
                     </CardContent>
                   </Card>
-                );
-              })}
-            </div>
+              );
+            })}
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Empty State for Selected Level */}
-        {selectedLevel && levelCourses.length === 0 && (
-          <div className="text-center py-16">
-            <BookOpen className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
-            <h3 className="text-xl font-display mb-2">Nenhum curso disponível</h3>
-            <p className="text-muted-foreground">
-              Os cursos deste nível estarão disponíveis em breve ✨
-            </p>
-          </div>
-        )}
-      </main>
-    </div>
+      {/* Empty State for Selected Level */}
+      {selectedLevel && levelCourses.length === 0 && (
+        <div className="text-center py-16">
+          <BookOpen className="h-16 w-16 mx-auto text-slate-400 mb-4" />
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            Nenhum curso disponível
+          </h3>
+          <p className="text-slate-600 dark:text-slate-400">
+            Os cursos deste nível estarão disponíveis em breve ✨
+          </p>
+        </div>
+      )}
+    </TalentHubLayout>
   );
 };
 
