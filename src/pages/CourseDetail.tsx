@@ -4,9 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Play, CheckCircle2, Clock, BookOpen } from "lucide-react";
+import { Play, CheckCircle2, Clock, BookOpen, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import TalentHubLayout from "@/components/TalentHubLayout";
 
 type Lesson = {
   id: string;
@@ -24,6 +25,9 @@ const CourseDetail = () => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
+  const [levelName, setLevelName] = useState<string>("");
 
   useEffect(() => {
     if (id) {
@@ -38,16 +42,37 @@ const CourseDetail = () => {
         navigate("/auth");
         return;
       }
+      
+      setUser(user);
+      
+      // Fetch profile
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+      
+      setProfile(profileData);
 
-      // Fetch course
+      // Fetch course with level
       const { data: courseData, error: courseError } = await supabase
         .from("courses")
-        .select("*")
+        .select(`
+          *,
+          training_levels (
+            name,
+            short_name
+          )
+        `)
         .eq("id", id)
         .single();
 
       if (courseError) throw courseError;
       setCourse(courseData);
+      
+      if (courseData.training_levels) {
+        setLevelName(courseData.training_levels.short_name || courseData.training_levels.name);
+      }
 
       // Fetch lessons
       const { data: lessonsData, error: lessonsError } = await supabase
@@ -130,52 +155,56 @@ const CourseDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando curso...</p>
+      <TalentHubLayout userName={profile?.full_name || user?.email}>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-slate-600 dark:text-slate-400">Carregando curso...</p>
+          </div>
         </div>
-      </div>
+      </TalentHubLayout>
     );
   }
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center">
-        <div className="text-center">
-          <BookOpen className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
-          <h3 className="text-xl font-display mb-2">Curso não encontrado</h3>
-          <Button onClick={() => navigate("/courses")}>Voltar para Cursos</Button>
+      <TalentHubLayout userName={profile?.full_name || user?.email}>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <BookOpen className="h-16 w-16 mx-auto text-slate-400 mb-4" />
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">
+              Curso não encontrado
+            </h3>
+            <Button onClick={() => navigate("/courses")}>Voltar para Cursos</Button>
+          </div>
         </div>
-      </div>
+      </TalentHubLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
-      {/* Header */}
-      <header className="bg-background/80 backdrop-blur-lg border-b border-border sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/courses")}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div>
-                <h1 className="text-2xl font-display tracking-wider">{course.title}</h1>
-                <p className="text-sm text-muted-foreground">{course.category}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
-        {/* Course Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          <div className="lg:col-span-2">
-            <Card className="border-none shadow-sm overflow-hidden">
+    <TalentHubLayout userName={profile?.full_name || user?.email}>
+      {/* Breadcrumb / Level indicator */}
+      <div className="mb-6">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate("/courses")}
+          className="mb-2"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Voltar para Cursos
+        </Button>
+        {levelName && (
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            Você está em: <span className="font-semibold">{levelName}</span> da sua formação
+          </p>
+        )}
+      </div>
+      {/* Course Header */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <div className="lg:col-span-2">
+          <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
               <div className="relative h-96">
                 <img
                   src={course.thumbnail_url || "https://images.unsplash.com/photo-1445384763658-0400939829cd?w=800"}
@@ -188,10 +217,10 @@ const CourseDetail = () => {
                 <CardDescription className="text-base">{course.description}</CardDescription>
               </CardHeader>
             </Card>
-          </div>
+        </div>
 
-          <div>
-            <Card className="border-none shadow-sm sticky top-24">
+        <div>
+          <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50 sticky top-24">
               <CardHeader>
                 <CardTitle className="font-display">Seu Progresso</CardTitle>
               </CardHeader>
@@ -220,12 +249,12 @@ const CourseDetail = () => {
                   </Badge>
                 )}
               </CardContent>
-            </Card>
-          </div>
+          </Card>
         </div>
+      </div>
 
-        {/* Lessons List */}
-        <Card className="border-none shadow-sm">
+      {/* Lessons List */}
+      <Card className="rounded-2xl border-slate-200/50 dark:border-slate-700/50">
           <CardHeader>
             <CardTitle className="font-display text-2xl">Aulas do Curso</CardTitle>
             <CardDescription>
@@ -281,10 +310,9 @@ const CourseDetail = () => {
                 </p>
               </div>
             )}
-          </CardContent>
-        </Card>
-      </main>
-    </div>
+        </CardContent>
+      </Card>
+    </TalentHubLayout>
   );
 };
 

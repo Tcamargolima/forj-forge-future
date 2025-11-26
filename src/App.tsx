@@ -21,6 +21,8 @@ import TalentDetail from "./pages/admin/TalentDetail";
 import JourneyManagement from "./pages/admin/JourneyManagement";
 import BrandsManagement from "./pages/admin/BrandsManagement";
 import JobsManagement from "./pages/admin/JobsManagement";
+import CoursesManagement from "./pages/admin/CoursesManagement";
+import CourseLessonsManagement from "./pages/admin/CourseLessonsManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +52,8 @@ const App = () => (
           <Route path="/admin/journey" element={<JourneyManagement />} />
           <Route path="/admin/brands" element={<BrandsManagement />} />
           <Route path="/admin/jobs" element={<JobsManagement />} />
+          <Route path="/admin/courses" element={<CoursesManagement />} />
+          <Route path="/admin/courses/:courseId/lessons" element={<CourseLessonsManagement />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
