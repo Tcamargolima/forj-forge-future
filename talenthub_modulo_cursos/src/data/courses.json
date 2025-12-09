@@ -1,0 +1,122 @@
+[
+  {
+    "id": "65f3445a-6c01-42f1-89b9-b60d69a1af02",
+    "title": "Introdu\u00e7\u00e3o & Boas-vindas",
+    "description": "Este curso aborda os fundamentos de introdu\u00e7\u00e3o & boas-vindas.",
+    "category": "FUNDAMENTOS",
+    "thumbnail_url": "/assets/thumbnails/course_1.jpg",
+    "is_active": true,
+    "training_level_id": "d5526344-c9ce-4688-b418-95ea84bd7e6e",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "0962f9e4-c5a5-4b42-aa7d-192fa06126aa",
+    "title": "Fotogenia Essencial",
+    "description": "Este curso aborda os fundamentos de fotogenia essencial.",
+    "category": "FUNDAMENTOS",
+    "thumbnail_url": "/assets/thumbnails/course_2.jpg",
+    "is_active": true,
+    "training_level_id": "d5526344-c9ce-4688-b418-95ea84bd7e6e",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "2edd8fd0-8c4a-4d8e-9d79-fbc5f2972550",
+    "title": "Poses que Aprovam",
+    "description": "Este curso aborda os fundamentos de poses que aprovam.",
+    "category": "FUNDAMENTOS",
+    "thumbnail_url": "/assets/thumbnails/course_3.jpg",
+    "is_active": true,
+    "training_level_id": "d5526344-c9ce-4688-b418-95ea84bd7e6e",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "cce57935-9067-4529-8522-62ea9f291eb1",
+    "title": "Look Ideal para Entrevista",
+    "description": "Este curso aborda os fundamentos de look ideal para entrevista.",
+    "category": "FUNDAMENTOS",
+    "thumbnail_url": "/assets/thumbnails/course_4.jpg",
+    "is_active": true,
+    "training_level_id": "d5526344-c9ce-4688-b418-95ea84bd7e6e",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "f5acf08e-7c3a-4f41-b82d-6fc08bd8160d",
+    "title": "Comunica\u00e7\u00e3o & Apresenta\u00e7\u00e3o",
+    "description": "Este curso aborda os fundamentos de comunica\u00e7\u00e3o & apresenta\u00e7\u00e3o.",
+    "category": "FUNDAMENTOS",
+    "thumbnail_url": "/assets/thumbnails/course_5.jpg",
+    "is_active": true,
+    "training_level_id": "d5526344-c9ce-4688-b418-95ea84bd7e6e",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "d5faca89-270c-4a4a-b525-b58d6069527a",
+    "title": "Mini M\u00eddia Kit Express",
+    "description": "Este curso aborda os fundamentos de mini m\u00eddia kit express.",
+    "category": "FUNDAMENTOS",
+    "thumbnail_url": "/assets/thumbnails/course_6.jpg",
+    "is_active": true,
+    "training_level_id": "d5526344-c9ce-4688-b418-95ea84bd7e6e",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "3cd250e8-ec5e-48d5-a2b6-560e547ec83c",
+    "title": "Simula\u00e7\u00e3o Real de Casting",
+    "description": "Este curso aborda os fundamentos de simula\u00e7\u00e3o real de casting.",
+    "category": "FUNDAMENTOS",
+    "thumbnail_url": "/assets/thumbnails/course_7.jpg",
+    "is_active": true,
+    "training_level_id": "d5526344-c9ce-4688-b418-95ea84bd7e6e",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "5bbe778e-3edc-4712-9315-d0a10a4595a8",
+    "title": "Self Tape Profissional",
+    "description": "Este curso aborda os fundamentos de self tape profissional.",
+    "category": "DESENVOLVIMENTO",
+    "thumbnail_url": "/assets/thumbnails/course_8.jpg",
+    "is_active": true,
+    "training_level_id": "e5dcff61-1c9e-4336-b70d-2db7ceacbeac",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "8d4ba4a8-541c-42d9-8957-784ac0bbae11",
+    "title": "Express\u00e3o Facial Profissional",
+    "description": "Este curso aborda os fundamentos de express\u00e3o facial profissional.",
+    "category": "DESENVOLVIMENTO",
+    "thumbnail_url": "/assets/thumbnails/course_9.jpg",
+    "is_active": true,
+    "training_level_id": "e5dcff61-1c9e-4336-b70d-2db7ceacbeac",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "ece563ba-9cf4-41e5-9250-f82536f27b4c",
+    "title": "Passarela Online B\u00e1sica",
+    "description": "Este curso aborda os fundamentos de passarela online b\u00e1sica.",
+    "category": "PROFISSIONALIZA\u00c7\u00c3O",
+    "thumbnail_url": "/assets/thumbnails/course_10.jpg",
+    "is_active": true,
+    "training_level_id": "8a9bdffd-cbff-4e15-bd29-a9f493337d3d",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "cd3ed5ac-b4f2-42fa-8b87-692b2695664f",
+    "title": "Mercado da Moda & Publicidade",
+    "description": "Este curso aborda os fundamentos de mercado da moda & publicidade.",
+    "category": "PROFISSIONALIZA\u00c7\u00c3O",
+    "thumbnail_url": "/assets/thumbnails/course_11.jpg",
+    "is_active": true,
+    "training_level_id": "8a9bdffd-cbff-4e15-bd29-a9f493337d3d",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  },
+  {
+    "id": "6097ab71-d549-4a47-953f-8ad5d6f6230a",
+    "title": "Mentoria Online (base gravada)",
+    "description": "Este curso aborda os fundamentos de mentoria online (base gravada).",
+    "category": "ALTO DESEMPENHO",
+    "thumbnail_url": "/assets/thumbnails/course_12.jpg",
+    "is_active": true,
+    "training_level_id": "5cd4c27c-5c30-4ed6-ab0f-dcb4617b5367",
+    "created_at": "2025-12-09T04:04:10.797911+00"
+  }
+]

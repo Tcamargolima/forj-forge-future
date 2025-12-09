@@ -1,0 +1,422 @@
+Olá Manus!
+Preciso que você assuma o papel de:
+
+Desenvolvedor Full Stack Sênior
+
+Instrutor especialista em formação de modelos
+
+Produtor de conteúdo educacional
+
+Criador de materiais multimídia
+
+Arquiteto de dados e estruturador de cursos
+
+Designer de materiais educacionais
+
+Gerador de pacotes estruturados para deploy
+
+Sua missão é desenvolver TODO O MÓDULO DE CURSOS E FORMAÇÃO DO TALENT HUB, incluindo:
+
+Conteúdo completo de todos os cursos
+
+Roteiros
+
+PDFs profissionais
+
+Vídeos mock (MP4)
+
+Thumbnails
+
+Checklists
+
+Exercícios
+
+Scripts SQL
+
+Seeds para Supabase
+
+Arquivos JSON
+
+Componentes React sugeridos
+
+Estrutura de pastas
+
+Documentação completa
+
+Este módulo será integrado ao Talent Hub, cujo código atual reside em:
+
+👉 https://github.com/Tcamargolima/forj-forge-future
+
+Você deve seguir o mesmo estilo visual, padrões, arquitetura e UI já existentes no projeto.
+
+🔥 SEÇÃO 1 — OBJETIVO GERAL
+
+Construir o módulo completo de formação do Talent Hub, incluindo:
+
+Cursos estruturados
+
+Aulas com materiais completos
+
+Pacotes comerciais com controle de acesso (START, ADVANCED, PRO PREMIUM)
+
+Conexão com a timeline de formação (training_levels)
+
+Regras de acesso por pacote
+
+Arquivos que possam ser rodados localmente e commitados no GitHub
+
+Você deve entregar todo o conteúdo e estrutura dentro de um pacote ZIP final ou um repositório Git pronto para clonar.
+
+🧩 SEÇÃO 2 — PROGRAMA COMPLETO DE FORMAÇÃO
+
+Você deve criar todos os cursos, aulas, materiais, vídeos e PDFs listados abaixo.
+
+🎓 NÍVEL 1 — FUNDAMENTOS (Pacote START)
+Curso 1 — Introdução & Boas-vindas
+
+Criar:
+
+4 a 6 aulas
+
+Vídeos mock (MP4)
+
+Roteiros .md
+
+PDF completo com imagens placeholders
+
+Checklist
+
+Exercícios
+
+Curso 2 — Fotogenia Essencial
+
+Luz e ângulos
+
+Corpo relaxado
+
+Prática orientada
+
+Material em PDF
+
+Vídeos e thumbnails
+
+Curso 3 — Poses que Aprovam
+
+Poses padrão
+
+Postura neutra
+
+Erros comuns
+
+PDF + exercícios
+
+Curso 4 — Look Ideal para Entrevista
+
+Looks aprovados
+
+O que reprova
+
+Cabelo/maquiagem
+
+Checklist visual
+
+Curso 5 — Comunicação & Apresentação
+
+Resposta “fale sobre você”
+
+Linguagem corporal
+
+Exercícios de vídeo
+
+Curso 6 — Mini Mídia Kit Express
+
+Templates
+
+Fotos recomendadas
+
+PDF estruturado profissionalmente
+
+Curso 7 — Simulação Real de Casting
+
+Perguntas reais
+
+Exemplos bons/ruins
+
+Vídeo simulado
+
+Cada curso deve incluir:
+
+✔ Scripts
+✔ PDFs
+✔ Vídeos mock
+✔ Exercícios
+✔ Material complementar
+✔ Thumbnails
+✔ JSON para importação
+
+🟧 NÍVEL 2 — DESENVOLVIMENTO (Pacote ADVANCED)
+Curso 8 — Self Tape Profissional
+
+Setup
+
+Iluminação caseira
+
+Script
+
+Exercícios gravados
+
+Curso 9 — Expressão Facial Profissional
+
+Relaxamento
+
+Microexpressões
+
+Rotinas práticas
+
+🟥 NÍVEL 3 — PROFISSIONALIZAÇÃO (Pacote PRO PREMIUM)
+Curso 10 — Passarela Online Básica
+
+Caminhada
+
+Postura
+
+Ritmo
+
+Exercícios
+
+Curso 11 — Mercado da Moda & Publicidade
+
+Funcionamento do mercado
+
+Como funcionam os cachês
+
+Profissionalismo
+
+🟩 NÍVEL 4 — ALTO DESEMPENHO (Pacote PRO PREMIUM)
+Curso 12 — Mentoria Online (base gravada)
+
+Correção de poses
+
+Revisões
+
+Direcionamento avançado
+
+📦 SEÇÃO 3 — PACOTES COMERCIAIS
+
+Você deve configurar os pacotes:
+
+🟦 START
+
+Todos os cursos do nível 1
+
+🟧 ADVANCED
+
+Todos do START
+
+Self Tape
+
+Expressão Facial
+
+🟥 PRO PREMIUM
+
+START + ADVANCED
+
+Passarela
+
+Mercado
+
+Mentoria
+
+O controle de acesso deve ser técnico e baseado em tabelas e lógica SQL.
+
+🛠️ SEÇÃO 4 — MODELAGEM DE DADOS (SQL COMPLETO)
+
+O Supabase já possui:
+
+courses
+
+course_lessons
+
+talent_courses
+
+lesson_progress
+
+training_levels
+
+profiles
+
+user_roles
+
+Você deve criar duas novas tabelas:
+
+Tabela 1 — course_packages
+
+Define quais cursos pertencem a qual pacote.
+
+id (UUID)
+package_code TEXT ('start', 'advanced', 'premium')
+course_id UUID (FK)
+created_at timestamp
+
+Tabela 2 — talent_packages
+
+Define o pacote adquirido por cada talento.
+
+id
+talent_id (FK)
+package_code
+purchased_at
+
+Você deve entregar também:
+
+SQL para criar essas tabelas
+
+SQL de seed de todos os cursos
+
+SQL de seed de todas as aulas
+
+SQL de seed ligando cursos aos pacotes
+
+RLS para proteger dados (apenas o talento vê seu pacote; admin controla tudo)
+
+🧱 SEÇÃO 5 — ARQUIVOS A ENTREGAR (OBRIGATÓRIO)
+
+Você deve entregar um ZIP contendo:
+
+/database
+    schema.sql
+    seed_courses.sql
+    seed_lessons.sql
+    seed_packages.sql
+    seed_training_levels.sql
+
+/src/components
+    CourseCard.jsx
+    LessonViewer.jsx
+    PackageLocked.jsx
+    TrainingJourney.jsx
+    CourseListByPackage.jsx
+    TimelineLevel.jsx
+
+/content
+    /curso1
+       aula1.mp4
+       aula1.pdf
+       aula1_script.md
+       thumbnail.jpg
+       exercicios.pdf
+       checklist.pdf
+    /curso2
+       ...
+    /curso12
+       ...
+
+/assets
+    thumbnails
+    icons
+    banners
+
+/README.md
+
+
+Todos os vídeos podem ser placeholders (720p, texto central).
+PDFs devem seguir padrão visual do Talent Hub (Apple-like).
+
+🎨 SEÇÃO 6 — PADRÃO DE DESIGN DO TALENT HUB (SEGUIR OBRIGATORIAMENTE)
+
+O projeto utiliza um estilo:
+
+Minimalista
+
+Bordas arredondadas (16–24px)
+
+Tipografia legível (estilo Apple SF-like)
+
+Muito espaço branco
+
+Cards com sombra suave
+
+Organização modular
+
+Você deve aplicar esse estilo em:
+
+PDFs
+
+Thumbnails
+
+Estrutura de scripts
+
+Componentes React sugeridos
+
+Qualquer gráfico ou visual de apoio
+
+📘 SEÇÃO 7 — ARQUIVOS JSON PARA FRONTEND
+
+Gerar:
+
+courses.json
+lessons.json
+packages.json
+training_levels.json
+
+
+Com estrutura consistente para consumo no frontend.
+
+💻 SEÇÃO 8 — DOCUMENTAÇÃO COMPLETA (README.md)
+
+O README deve explicar:
+
+Como instalar dependências
+
+Como rodar o projeto localmente
+
+Como importar os arquivos SQL no Supabase
+
+Como integrar ao Lovable
+
+Como atualizar o GitHub
+
+Estrutura de pastas
+
+Lista dos cursos e aulas
+
+📤 SEÇÃO 9 — FORMA DE ENTREGA
+
+Você deve entregar um pacote ZIP com toda a estrutura acima OU um repositório Git privo/clonável contendo tudo organizado.
+
+🧠 SEÇÃO 10 — MENSAGEM FINAL PARA GARANTIR QUE VOCÊ ENTENDEU
+
+Manus, sua missão é criar, estruturar, organizar e entregar todo o módulo de formação do Talent Hub, incluindo:
+
+Conteúdo
+
+Vídeos
+
+PDFs
+
+Exercícios
+
+Aulas
+
+Estrutura técnica
+
+JSON
+
+SQL
+
+Componentes
+
+Documentação
+
+O resultado deve ser:
+
+✔ profissional
+✔ organizado
+✔ compatível com Supabase + React + Lovable
+✔ seguindo o padrão visual do site
+✔ fácil de importar e instalar
+✔ pronto para commit no GitHub
+
+✅ COMANDO FINALIZADO
+
+Este é o comando completo, detalhado, sem cortes e sem resumos — pronto para enviar ao Manus IA.
