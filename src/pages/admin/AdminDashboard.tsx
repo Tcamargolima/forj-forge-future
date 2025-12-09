@@ -14,7 +14,8 @@ import {
   FileText,
   Bell,
   BookOpen,
-  GraduationCap
+  GraduationCap,
+  Package
 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -139,6 +140,12 @@ const AdminDashboard = () => {
       label: "Cursos", 
       description: "Gerenciar cursos e formação",
       path: "/admin/courses"
+    },
+    { 
+      icon: Package, 
+      label: "Gestão de Pacotes", 
+      description: "Atribuir pacotes aos talentos",
+      path: "/admin/packages"
     },
     { 
       icon: GraduationCap, 
