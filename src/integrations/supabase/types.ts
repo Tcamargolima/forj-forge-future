@@ -91,6 +91,35 @@ export type Database = {
           },
         ]
       }
+      course_packages: {
+        Row: {
+          course_id: string
+          created_at: string | null
+          id: string
+          package_code: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string | null
+          id?: string
+          package_code: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string | null
+          id?: string
+          package_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_packages_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courses: {
         Row: {
           category: string | null
@@ -441,6 +470,41 @@ export type Database = {
             foreignKeyName: "talent_courses_talent_id_fkey"
             columns: ["talent_id"]
             isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      talent_packages: {
+        Row: {
+          created_at: string | null
+          id: string
+          package_code: string
+          purchased_at: string | null
+          talent_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          package_code: string
+          purchased_at?: string | null
+          talent_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          package_code?: string
+          purchased_at?: string | null
+          talent_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_packages_talent_id_fkey"
+            columns: ["talent_id"]
+            isOneToOne: true
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
