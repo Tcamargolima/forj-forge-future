@@ -19,49 +19,64 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Sparkles, CheckCircle2 } from "lucide-react";
 
 const COUNTRIES = [
-  "Brasil",
-  "Portugal",
-  "Estados Unidos",
-  "Reino Unido",
-  "Espanha",
-  "França",
-  "Alemanha",
-  "Itália",
-  "Outro",
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
+  "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
+  "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
+  "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica",
+  "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt",
+  "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon",
+  "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
+  "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel",
+  "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait",
+  "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+  "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico",
+  "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru",
+  "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman",
+  "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
+  "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe",
+  "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia",
+  "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria",
+  "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
+  "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu",
+  "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
 ];
 
 const INTERESTS = [
-  { id: "modeling", label: "Modelagem" },
-  { id: "acting", label: "Atuação" },
-  { id: "commercial", label: "Comerciais" },
-  { id: "fashion", label: "Moda" },
-  { id: "events", label: "Eventos" },
-  { id: "digital", label: "Digital/Influencer" },
+  { id: "new_face", label: "New Face" },
+  { id: "casting", label: "Casting" },
+  { id: "courses", label: "Courses" },
 ];
 
 const leadSchema = z.object({
   full_name: z
     .string()
     .trim()
-    .min(3, "Nome deve ter pelo menos 3 caracteres")
-    .max(100, "Nome muito longo"),
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name is too long"),
   email: z
     .string()
     .trim()
-    .email("Email inválido")
-    .max(255, "Email muito longo"),
-  country: z.string().min(1, "Selecione um país"),
+    .email("Please enter a valid email address")
+    .max(255, "Email is too long"),
+  country: z.string().min(1, "Please select your country"),
   age: z
-    .number({ invalid_type_error: "Idade é obrigatória" })
-    .min(16, "Idade mínima é 16 anos")
-    .max(99, "Idade inválida"),
-  interests: z.array(z.string()).min(1, "Selecione pelo menos uma área"),
+    .number({ invalid_type_error: "Age is required" })
+    .min(13, "Must be at least 13 years old")
+    .max(120, "Please enter a valid age"),
+  interests: z.array(z.string()).min(1, "Please select at least one interest"),
 });
 
 type LeadFormData = z.infer<typeof leadSchema>;
@@ -100,6 +115,9 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
 
       if (error) throw error;
 
+      // Mark as submitted in localStorage
+      localStorage.setItem("leadFormSubmitted", "true");
+      
       setIsSuccess(true);
       form.reset();
       
@@ -109,8 +127,8 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
       }, 3000);
     } catch (error: any) {
       toast({
-        title: "Erro ao enviar",
-        description: error.message || "Tente novamente mais tarde",
+        title: "Error",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -129,16 +147,16 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
   if (isSuccess) {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md rounded-2xl">
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <div className="rounded-full bg-primary/10 p-4 mb-4">
               <CheckCircle2 className="h-12 w-12 text-primary" />
             </div>
             <DialogTitle className="text-2xl font-display mb-2">
-              Cadastro realizado!
+              Application Submitted!
             </DialogTitle>
             <DialogDescription className="text-base">
-              Obrigado pelo seu interesse. Entraremos em contato em breve!
+              Thank you for your interest. We'll be in touch soon!
             </DialogDescription>
           </div>
         </DialogContent>
@@ -148,7 +166,7 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl">
         <DialogHeader className="text-center pb-4">
           <div className="flex justify-center mb-4">
             <div className="rounded-full bg-primary/10 p-3">
@@ -156,10 +174,10 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
             </div>
           </div>
           <DialogTitle className="text-2xl font-display tracking-wide">
-            Quero fazer parte
+            Join Our Community
           </DialogTitle>
           <DialogDescription className="text-base">
-            Preencha seus dados para iniciar sua jornada na FORJ
+            Fill in your details to start your journey with FORJ
           </DialogDescription>
         </DialogHeader>
 
@@ -170,10 +188,11 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
               name="full_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome completo</FormLabel>
+                  <FormLabel>Full Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Seu nome completo"
+                      placeholder="Your full name"
+                      className="rounded-xl"
                       {...field}
                       disabled={isSubmitting}
                     />
@@ -188,11 +207,12 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email Address</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder="seu@email.com"
+                      placeholder="your@email.com"
+                      className="rounded-xl"
                       {...field}
                       disabled={isSubmitting}
                     />
@@ -208,21 +228,25 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
                 name="country"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>País</FormLabel>
-                    <FormControl>
-                      <select
-                        className="flex h-10 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        {...field}
-                        disabled={isSubmitting}
-                      >
-                        <option value="">Selecione</option>
+                    <FormLabel>Country</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                      disabled={isSubmitting}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="rounded-xl">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="max-h-60">
                         {COUNTRIES.map((country) => (
-                          <option key={country} value={country}>
+                          <SelectItem key={country} value={country}>
                             {country}
-                          </option>
+                          </SelectItem>
                         ))}
-                      </select>
-                    </FormControl>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -233,11 +257,12 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
                 name="age"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Idade</FormLabel>
+                    <FormLabel>Age</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="Ex: 25"
+                        placeholder="e.g. 25"
+                        className="rounded-xl"
                         {...field}
                         onChange={(e) =>
                           field.onChange(
@@ -258,8 +283,8 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
               name="interests"
               render={() => (
                 <FormItem>
-                  <FormLabel>Áreas de interesse</FormLabel>
-                  <div className="grid grid-cols-2 gap-3 mt-2">
+                  <FormLabel>Areas of Interest</FormLabel>
+                  <div className="grid grid-cols-3 gap-3 mt-2">
                     {INTERESTS.map((interest) => (
                       <FormField
                         key={interest.id}
@@ -281,6 +306,7 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
                                   }
                                 }}
                                 disabled={isSubmitting}
+                                className="rounded"
                               />
                             </FormControl>
                             <FormLabel className="text-sm font-normal cursor-pointer">
@@ -298,16 +324,16 @@ export function LeadCaptureModal({ open, onOpenChange }: LeadCaptureModalProps) 
 
             <Button
               type="submit"
-              className="w-full h-12 text-base font-medium"
+              className="w-full h-12 text-base font-medium rounded-xl"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Enviando...
+                  Submitting...
                 </>
               ) : (
-                "Enviar cadastro"
+                "Submit Application"
               )}
             </Button>
           </form>
