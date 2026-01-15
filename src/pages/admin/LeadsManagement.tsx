@@ -38,6 +38,10 @@ interface Lead {
 }
 
 const INTEREST_LABELS: Record<string, string> = {
+  new_face: "New Face",
+  casting: "Casting",
+  courses: "Courses",
+  // Legacy support for old entries
   modeling: "Modelagem",
   acting: "Atuação",
   commercial: "Comerciais",
