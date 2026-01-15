@@ -280,6 +280,39 @@ export type Database = {
           },
         ]
       }
+      leads: {
+        Row: {
+          age: number
+          country: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          interests: string[]
+          submitted_at: string
+        }
+        Insert: {
+          age: number
+          country: string
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          interests?: string[]
+          submitted_at?: string
+        }
+        Update: {
+          age?: number
+          country?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          interests?: string[]
+          submitted_at?: string
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           completed_at: string | null

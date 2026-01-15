@@ -15,7 +15,8 @@ import {
   Bell,
   BookOpen,
   GraduationCap,
-  Package
+  Package,
+  UserPlus
 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -152,6 +153,12 @@ const AdminDashboard = () => {
       label: "Relatórios de Formação", 
       description: "Acompanhar progresso dos talentos",
       badge: "Em breve"
+    },
+    { 
+      icon: UserPlus, 
+      label: "Leads", 
+      description: "Interessados em fazer parte da agência",
+      path: "/admin/leads"
     },
   ];
 

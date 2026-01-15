@@ -1,4 +1,9 @@
+import { useState } from "react";
+import { LeadCaptureModal } from "./LeadCaptureModal";
+
 const Hero = () => {
+  const [showLeadModal, setShowLeadModal] = useState(false);
+
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Video Background */}
@@ -47,21 +52,33 @@ const Hero = () => {
             <span className="text-neon">OF FASHION</span>
           </h2>
           
-          {/* CTA Button */}
-          <button 
-            onClick={() => {
-              document.getElementById('talent-section')?.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-              });
-            }}
-            className="group relative px-12 py-4 bg-transparent border-2 border-neon overflow-hidden transition-all duration-500 hover:scale-105 cursor-pointer"
-          >
-            <span className="relative z-10 font-display text-xl tracking-wider text-neon group-hover:text-carbon transition-colors duration-500">
-              DISCOVER TALENT
-            </span>
-            <div className="absolute inset-0 bg-neon transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
-          </button>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <button 
+              onClick={() => {
+                document.getElementById('talent-section')?.scrollIntoView({ 
+                  behavior: 'smooth',
+                  block: 'start'
+                });
+              }}
+              className="group relative px-12 py-4 bg-transparent border-2 border-neon overflow-hidden transition-all duration-500 hover:scale-105 cursor-pointer"
+            >
+              <span className="relative z-10 font-display text-xl tracking-wider text-neon group-hover:text-carbon transition-colors duration-500">
+                DISCOVER TALENT
+              </span>
+              <div className="absolute inset-0 bg-neon transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+            </button>
+
+            <button 
+              onClick={() => setShowLeadModal(true)}
+              className="group relative px-12 py-4 bg-neon border-2 border-neon overflow-hidden transition-all duration-500 hover:scale-105 cursor-pointer"
+            >
+              <span className="relative z-10 font-display text-xl tracking-wider text-carbon group-hover:text-neon transition-colors duration-500">
+                JOIN US
+              </span>
+              <div className="absolute inset-0 bg-carbon transform translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+            </button>
+          </div>
         </div>
 
         {/* Scroll Indicator */}
@@ -69,6 +86,9 @@ const Hero = () => {
           <div className="w-[2px] h-16 bg-gradient-to-b from-neon to-transparent" />
         </div>
       </div>
+
+      {/* Lead Capture Modal */}
+      <LeadCaptureModal open={showLeadModal} onOpenChange={setShowLeadModal} />
     </section>
   );
 };
